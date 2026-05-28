@@ -1,0 +1,318 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── StreamVault OTT Theme + CMS Design System ── */
+:root {
+  --brand-gold: #D4A017;
+  --brand-gold: #F5C518;
+  --bg-dark: #0A0A0F;
+  --bg-card: #111118;
+  --bg-border: #1E1E2E;
+
+  /* CMS Design Tokens (new) */
+  --bg-base: #0a0a0b;
+  --bg-surface: #111114;
+  --bg-card: #18181c;
+  --bg-elevated: #1e1e24;
+  --bg-input: #13131a;
+  --border: #2a2a35;
+  --border-light: #333340;
+  --accent: #f5c518;
+  --accent-dim: #c9a014;
+  --accent-glow: rgba(245, 197, 24, 0.15);
+  --accent-subtle: rgba(245, 197, 24, 0.08);
+  --text-primary: #f0f0f5;
+  --text-secondary: #9090a8;
+  --text-muted: #5a5a70;
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.12);
+  --red: #ef4444;
+  --red-dim: rgba(239, 68, 68, 0.12);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59, 130, 246, 0.12);
+  --orange: #f97316;
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --sidebar-w: 220px;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition: 0.18s ease;
+
+  /* Legacy tokens */
+  --sv-amber-primary:    #F59E0B;
+  --sv-amber-hover:      #D97706;
+  --sv-amber-muted:      rgba(245, 158, 11, 0.15);
+  --sv-bg-primary:       #0F0F10;
+  --sv-bg-card:          #141415;
+  --sv-bg-card-hover:    #1A1A1C;
+  --sv-border-subtle:    rgba(255, 255, 255, 0.06);
+  --sv-border-active:    rgba(255, 255, 255, 0.12);
+  --sv-text-primary:     #F9FAFB;
+  --sv-text-secondary:   #9CA3AF;
+  --sv-text-muted:       #6B7280;
+  --sv-status-published: #10B981;
+  --sv-status-draft:     #6B7280;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Responsive typography scaling */
+@media (max-width: 640px) {
+  html { font-size: 13px; }
+}
+@media (min-width: 1920px) {
+  html { font-size: 15px; }
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 13px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  outline: none;
+  width: 100%;
+  transition: border-color var(--transition);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+select { cursor: pointer; }
+select option { background: var(--bg-card); }
+
+button { font-family: var(--font-body); cursor: pointer; border: none; outline: none; }
+
+label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 5px; }
+
+.req { color: var(--accent); margin-left: 2px; }
+
+/* ── Movie card hover scale ── */
+.movie-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.movie-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  z-index: 10;
+  position: relative;
+}
+
+/* ── Glassmorphism utility ── */
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ── Gradient overlays ── */
+.hero-gradient {
+  background: linear-gradient(
+    to right,
+    rgba(10,10,15,0.95) 30%,
+    rgba(10,10,15,0.5) 60%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to top,
+    rgba(10,10,15,1) 0%,
+    transparent 40%
+  );
+}
+
+/* ── Row fade edges ── */
+.row-fade-right {
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+/* ── Swiper overrides ── */
+.swiper-slide { width: auto !important; }
+
+/* ── Input style ── */
+.input-dark {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--bg-border);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+.input-dark:focus {
+  border-color: var(--brand-gold);
+}
+.input-dark::placeholder { color: #555; }
+
+/* ── Premium badge ── */
+.badge-premium {
+  background: linear-gradient(135deg, #F5C518, #e0a800);
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+}
+
+/* ── Animate fade-in ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+
+/* ── Episode lock overlay ── */
+.episode-locked {
+  background: linear-gradient(135deg, rgba(245,197,24,0.1), rgba(245,197,24,0.05));
+  border: 1px solid rgba(245,197,24,0.3);
+}
+
+/* ── Thin scrollbar for episode sidebar ── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar { width: 4px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ── Slow spin for quality settings icon ── */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spinSlow 2s linear infinite; }
+
+/* ── Golden shimmer for primary buttons ── */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer {
+  0% { left: -75%; }
+  100% { left: 125%; }
+}
+
+/* Admin responsive primitives */
+.admin-page {
+  width: 100%;
+  max-width: 100%;
+}
+
+.admin-card {
+  width: 100%;
+  min-width: 0;
+}
+
+.admin-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollable table wrapper for mobile */
+.table-scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.table-scroll-container::-webkit-scrollbar { height: 4px; }
+.table-scroll-container::-webkit-scrollbar-track { background: transparent; }
+.table-scroll-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* Responsive form row - stacks on mobile */
+@media (max-width: 640px) {
+  .responsive-form-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Mobile-first content padding */
+@media (max-width: 640px) {
+  .admin-main-content main {
+    padding: 16px !important;
+  }
+}
+
+/* Layout primitives */
+.app-shell {
+  width: 100%;
+  max-width: 100%;
+}
+
+.section-shell {
+  width: min(100%, 1600px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 2vw, 2.5rem);
+}
+
+.rail-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: 1rem;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* chip interactions */
+.ott-chip {
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.ott-chip:hover {
+  box-shadow: 0 0 0 1px rgba(212,160,23,0.25) inset;
+}
+
+@media (hover: none) {
+  .movie-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
