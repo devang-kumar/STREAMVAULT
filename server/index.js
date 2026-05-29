@@ -26,10 +26,23 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ─── CORS Configuration ──────────────────────────────────────────────────
-const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : 'http://localhost:5173';
+const corsOrigins = new Set([
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://streamvault-wheat-three.vercel.app',
+]);
+if (process.env.CLIENT_URL) {
+  corsOrigins.add(process.env.CLIENT_URL.replace(/\/$/, ''));
+}
 app.use(cors({
-  origin: [clientUrl, 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
+  origin(origin, callback) {
+    if (!origin || corsOrigins.has(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  },
+  credentials: true,
 }));
 
 // ─── Body Parsing ────────────────────────────────────────────────────────

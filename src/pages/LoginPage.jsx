@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
+import { API_BASE } from '../api/client'
 
 export default function LoginPage() {
   const [mode, setMode] = useState('login')
@@ -113,7 +114,7 @@ export default function LoginPage() {
         {/* OAuth Buttons */}
         <div className="space-y-3">
           <a
-            href="http://localhost:5000/api/auth/google"
+            href={`${API_BASE}/auth/google`}
             className="flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-white font-medium text-sm transition-all hover:scale-[1.01] active:scale-[0.99] w-full"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">

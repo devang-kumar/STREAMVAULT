@@ -1,6 +1,6 @@
-import { getAuthHeader } from '../../api/client'
+import { getAuthHeader, CMS_BASE } from '../../api/client'
 
-const BASE = 'http://localhost:5000/api/cms'
+const BASE = CMS_BASE
 
 async function request(path, options = {}) {
   const headers = {

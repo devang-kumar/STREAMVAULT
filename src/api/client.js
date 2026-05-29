@@ -1,4 +1,8 @@
-const BASE = 'http://localhost:5000/api'
+/** API root — set VITE_API_URL on Vercel (e.g. https://your-api.onrender.com/api) */
+export const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '')
+export const CMS_BASE = `${API_BASE}/cms`
+
+const BASE = API_BASE
 
 export const getAuthHeader = () => {
   const token = localStorage.getItem('sv_token')
