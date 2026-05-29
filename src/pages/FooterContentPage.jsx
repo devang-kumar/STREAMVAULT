@@ -390,18 +390,18 @@ export default function FooterContentPage({ slug: propSlug }) {
   return (
     <div className="flex min-h-screen flex-col bg-[#0A0A0F]">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-[#1E1E2E] bg-[#0E0E14] py-16 sm:py-20">
+      <section className="relative overflow-hidden border-b border-[#1E1E2E] bg-[#0E0E14] py-8 sm:py-10">
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] to-transparent" />
-        <div className="absolute -left-1/4 -top-1/4 h-96 w-96 rounded-full bg-[#F5C518]/5 blur-3xl" />
+        <div className="absolute -left-1/4 -top-1/4 h-64 w-64 rounded-full bg-[#F5C518]/5 blur-3xl" />
         
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <span className="inline-block rounded-full bg-[#F5C518]/10 px-4 py-1 text-[10px] font-bold text-[#F5C518] uppercase tracking-wider border border-[#F5C518]/20">
+          <span className="inline-block rounded-full bg-[#F5C518]/10 px-3 py-0.5 text-[9px] font-bold text-[#F5C518] uppercase tracking-wider border border-[#F5C518]/20">
             Information
           </span>
-          <h1 className="mt-4 font-display text-4xl sm:text-5xl text-white tracking-wide font-extrabold uppercase">
+          <h1 className="mt-2 font-display text-2xl sm:text-3xl text-white tracking-wide font-extrabold uppercase">
             {pageData.title}
           </h1>
-          <div className="mt-4 flex items-center justify-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+          <div className="mt-2 flex items-center justify-center gap-2 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
             <span>Last Updated</span>
             <span className="text-[#F5C518]">{pageData.lastUpdated}</span>
           </div>
