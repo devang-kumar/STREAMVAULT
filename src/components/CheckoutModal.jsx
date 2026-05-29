@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Shield, Lock, CheckCircle, AlertCircle, ChevronRight, Loader } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
-import { createPaymentOrder, verifyPayment } from '../api/client'
+import { createPaymentOrder, verifyPayment, updatePlan } from '../api/client'
 
 const loadScript = (src) => {
   return new Promise((resolve) => {
@@ -20,7 +20,7 @@ const loadScript = (src) => {
 //   onClose  — called when modal is dismissed
 // ─────────────────────────────────────────────
 export default function CheckoutModal({ plan, onClose }) {
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   // Payment step: 'summary' | 'processing' | 'success' | 'failure'
   const [step, setStep] = useState('summary')
   const [error, setError] = useState('')
@@ -62,8 +62,15 @@ export default function CheckoutModal({ plan, onClose }) {
   // ── Payment handler ────────────────────────
   const handleProceedToPayment = async () => {
     if (isFree) {
-      // Free plan — no payment needed, skip to success
-      setStep('success')
+      setStep('processing')
+      try {
+        await updatePlan('Basic')
+        if (refreshUser) await refreshUser()
+        setStep('success')
+      } catch (err) {
+        setStep('failure')
+        setError(err.message || 'Failed to activate free plan.')
+      }
       return
     }
 
@@ -100,6 +107,7 @@ export default function CheckoutModal({ plan, onClose }) {
             })
             
             if (verifyRes.success) {
+              if (refreshUser) await refreshUser()
               setStep('success')
             } else {
               setStep('failure')

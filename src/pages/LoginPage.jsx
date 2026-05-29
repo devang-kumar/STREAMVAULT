@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { API_BASE } from '../api/client'
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const { login, register, error: authError } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -39,7 +40,8 @@ export default function LoginPage() {
         return
       }
 
-      navigate('/')
+      const from = location.state?.from?.pathname || '/'
+      navigate(from, { replace: true })
     } finally {
       setSubmitting(false)
     }

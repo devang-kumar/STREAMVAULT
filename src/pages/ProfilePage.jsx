@@ -273,19 +273,159 @@ function ChangePasswordModal({ onClose }) {
   )
 }
 
+function EditProfileModal({ profile, onClose, onRefresh }) {
+  const [name, setName] = useState(profile?.name || '')
+  const [avatarSeed, setAvatarSeed] = useState('')
+  const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatar || '')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  // Predefined cool Seeds for Adventure avatars
+  const PRESET_SEEDS = ['Liam', 'Sophia', 'Oliver', 'Emma', 'Jack', 'Charlotte', 'Leo', 'Mia']
+
+  const getAvatarUrl = (seed) => `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(seed)}`
+
+  const handlePresetSelect = (seed) => {
+    const url = getAvatarUrl(seed)
+    setSelectedAvatar(url)
+    setAvatarSeed('')
+  }
+
+  const handleCustomSeedChange = (val) => {
+    setAvatarSeed(val)
+    if (val.trim()) {
+      setSelectedAvatar(getAvatarUrl(val.trim()))
+    } else {
+      setSelectedAvatar(profile?.avatar || getAvatarUrl(profile?.name || 'user'))
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!name.trim()) {
+      setError('Display name is required')
+      return
+    }
+    setLoading(true)
+    setError('')
+    setSuccess('')
+    try {
+      await updateUserProfile({
+        name: name.trim(),
+        avatar: selectedAvatar
+      })
+      setSuccess('Profile updated successfully!')
+      if (onRefresh) await onRefresh()
+    } catch (err) {
+      setError(err.message || 'Failed to update profile')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-2 text-xs text-red-300">
+          <AlertCircle size={14} /> {error}
+        </div>
+      )}
+      {success && (
+        <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2 text-xs text-green-300">
+          <Check size={14} /> {success}
+        </div>
+      )}
+
+      {/* Avatar Preview */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="relative">
+          <img
+            src={selectedAvatar || getAvatarUrl(profile?.name || 'user')}
+            alt="Preview"
+            className="h-20 w-20 rounded-2xl border-2 border-[#D4A017] object-cover bg-[#0F0F1A]"
+          />
+        </div>
+        <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Avatar Preview</p>
+      </div>
+
+      {/* Display Name Input */}
+      <div>
+        <label className="block text-[11px] text-gray-400 mb-1 font-medium">Display Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="input-dark text-xs py-2"
+          placeholder="Enter display name"
+          required
+        />
+      </div>
+
+      {/* Preset Avatars Selection */}
+      <div>
+        <label className="block text-[11px] text-gray-400 mb-1.5 font-medium">Choose an Avatar Template</label>
+        <div className="grid grid-cols-4 gap-2">
+          {PRESET_SEEDS.map((seed) => {
+            const url = getAvatarUrl(seed)
+            const isSelected = selectedAvatar === url
+            return (
+              <button
+                key={seed}
+                type="button"
+                onClick={() => handlePresetSelect(seed)}
+                className={`relative rounded-xl border p-1 bg-[#0F0F1A] transition-all hover:scale-105 ${
+                  isSelected ? 'border-[#D4A017] ring-1 ring-[#D4A017]' : 'border-[#1E1E2E] hover:border-gray-500'
+                }`}
+              >
+                <img src={url} alt={seed} className="h-10 w-10 mx-auto object-cover" />
+                <span className="absolute bottom-0.5 left-0 right-0 text-[8px] text-gray-500 font-medium text-center truncate">{seed}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Custom Avatar Seed Input */}
+      <div>
+        <label className="block text-[11px] text-gray-400 mb-1 font-medium">Or type a Custom Avatar Seed</label>
+        <input
+          type="text"
+          value={avatarSeed}
+          onChange={(e) => handleCustomSeedChange(e.target.value)}
+          className="input-dark text-xs py-2"
+          placeholder="e.g. Maverick, Phoenix, StarLord..."
+        />
+        <p className="text-[9px] text-gray-500 mt-1 leading-relaxed">
+          Type anything above to auto-generate a unique adventurer avatar seed live!
+        </p>
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#D4A017] px-4 py-2.5 text-xs font-semibold text-black transition-all hover:bg-[#b8860b] disabled:opacity-50"
+      >
+        {loading ? <><Loader size={12} className="animate-spin" /> Saving...</> : 'Save Changes'}
+      </button>
+    </form>
+  )
+}
+
 export default function ProfilePage() {
-  const { user, logout } = useAuth()
+  const { user, logout, refreshUser } = useAuth()
   const navigate = useNavigate()
   const [profile, setProfile] = useState(user)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [activeModal, setActiveModal] = useState(null) // 'subscription' | 'email' | 'password' | null
+  const [activeModal, setActiveModal] = useState(null) // 'edit-profile' | 'subscription' | 'email' | 'password' | 'parental' | null
 
   const refreshProfile = async () => {
     try {
       const data = await getMe()
       setProfile(data?.user ?? data)
+      if (refreshUser) await refreshUser()
     } catch (_) {}
   }
 
@@ -316,11 +456,6 @@ export default function ProfilePage() {
     return () => { document.body.style.overflow = prev }
   }, [settingsOpen])
 
-  if (!profile && !isLoading) {
-    navigate('/login')
-    return null
-  }
-
   const handleLogout = () => {
     logout()
     navigate('/')
@@ -330,13 +465,14 @@ export default function ProfilePage() {
   const avatarUrl = profile?.avatar || `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(profile?.name || 'user')}`
 
   const settingsRows = [
+    { label: 'Profile Details', value: profile?.name || '-', icon: Settings, color: '#ec4899', onClick: () => setActiveModal('edit-profile') },
     { label: 'Subscription', value: profile?.plan || 'Free', icon: Crown, color: '#D4A017', onClick: () => setActiveModal('subscription') },
     { label: 'Email', value: profile?.email || '-', icon: Mail, color: '#3b82f6', onClick: () => setActiveModal('email') },
     { label: 'Password', value: '••••••••', icon: Lock, color: '#22c55e', onClick: () => setActiveModal('password') },
     { label: 'Parental Controls', value: 'Off', icon: Shield, color: '#a78bfa', onClick: () => setActiveModal('parental') },
   ]
 
-  const modalTitle = activeModal === 'subscription' ? 'Subscription Management' : activeModal === 'email' ? 'Change Email' : activeModal === 'password' ? 'Change Password' : activeModal === 'parental' ? 'Parental Controls' : ''
+  const modalTitle = activeModal === 'edit-profile' ? 'Profile Details' : activeModal === 'subscription' ? 'Subscription Management' : activeModal === 'email' ? 'Change Email' : activeModal === 'password' ? 'Change Password' : activeModal === 'parental' ? 'Parental Controls' : ''
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] px-4 pb-16 pt-24 sm:px-6">
@@ -458,6 +594,7 @@ export default function ProfilePage() {
                 ← Back to Settings
               </button>
               <h3 className="text-sm font-semibold text-white mb-3">{modalTitle}</h3>
+              {activeModal === 'edit-profile' && <EditProfileModal profile={profile} onClose={() => setActiveModal(null)} onRefresh={refreshProfile} />}
               {activeModal === 'subscription' && <SubscriptionModal profile={profile} onClose={() => setActiveModal(null)} onRefresh={refreshProfile} />}
               {activeModal === 'email' && <ChangeEmailModal profile={profile} onClose={() => setActiveModal(null)} onRefresh={refreshProfile} />}
               {activeModal === 'password' && <ChangePasswordModal onClose={() => setActiveModal(null)} />}

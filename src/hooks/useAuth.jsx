@@ -77,8 +77,19 @@ export function AuthProvider({ children }) {
     setError('')
   }
 
+  const refreshUser = async () => {
+    try {
+      const res = await getMe()
+      const resolvedUser = res?.user ?? res
+      setUser(resolvedUser || null)
+      return { ok: true, user: resolvedUser }
+    } catch (err) {
+      return { ok: false, error: err?.message || 'Failed to refresh session' }
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, error, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, error, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )
