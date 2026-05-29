@@ -282,7 +282,7 @@ export default function PagesManagementPage() {
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: 14 }}>
                 <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-                  Updated: {page.lastUpdated ? new Date(page.lastUpdated).toLocaleDateString() : 'Never'}
+                  Updated: {page.lastUpdated && !isNaN(Date.parse(page.lastUpdated)) ? new Date(page.lastUpdated).toLocaleDateString() : page.lastUpdated || 'Never'}
                 </span>
                 <button
                   onClick={() => handleOpenEdit(page)}
