@@ -398,7 +398,7 @@ export default function FooterContentPage({ slug: propSlug }) {
           <span className="inline-block rounded-full bg-[#F5C518]/10 px-3 py-0.5 text-[9px] font-bold text-[#F5C518] uppercase tracking-wider border border-[#F5C518]/20">
             Information
           </span>
-          <h1 className="mt-2 font-display text-2xl sm:text-3xl text-white tracking-wide font-extrabold uppercase">
+          <h1 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl text-white tracking-widest font-extrabold uppercase">
             {pageData.title}
           </h1>
           <div className="mt-2 flex items-center justify-center gap-2 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
