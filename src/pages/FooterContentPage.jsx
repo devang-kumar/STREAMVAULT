@@ -390,7 +390,7 @@ export default function FooterContentPage({ slug: propSlug }) {
   return (
     <div className="flex min-h-screen flex-col bg-[#0A0A0F]">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-[#1E1E2E] bg-[#0E0E14] py-8 sm:py-10">
+      <section className="relative overflow-hidden border-b border-[#1E1E2E] bg-[#0E0E14] pt-24 pb-10">
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] to-transparent" />
         <div className="absolute -left-1/4 -top-1/4 h-64 w-64 rounded-full bg-[#F5C518]/5 blur-3xl" />
         
