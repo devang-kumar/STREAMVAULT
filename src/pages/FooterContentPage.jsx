@@ -409,10 +409,10 @@ export default function FooterContentPage({ slug: propSlug }) {
       </section>
 
       {/* Content Section */}
-      <section className="flex-1 px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-screen-xl">
+      <section className="flex-1 px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center">
+        <div className="w-full max-w-4xl">
           {/* Page Description paragraph */}
-          <div className="mx-auto max-w-4xl">
+          <div className="w-full mb-8">
             <div 
               style={{ 
                 borderRadius: 'var(--radius-xl)', 
@@ -422,9 +422,9 @@ export default function FooterContentPage({ slug: propSlug }) {
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
               }} 
-              className="p-8 sm:p-12 md:p-14"
+              className="p-6 sm:p-10"
             >
-              <p className="text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose text-gray-200 text-center font-medium whitespace-pre-line select-text">
+              <p className="text-sm sm:text-base leading-relaxed sm:leading-loose text-gray-200 text-center font-medium whitespace-pre-line select-text">
                 {pageData.content}
               </p>
             </div>
