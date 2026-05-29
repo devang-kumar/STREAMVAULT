@@ -1,0 +1,51 @@
+[
+  {
+    "id": "admin-1",
+    "name": "Alex Rivera",
+    "email": "admin@streamvault.dev",
+    "passwordHash": "$2b$12$lsa//1fYrEQueWl16.tmYu7kcV9B1VADHn2Eq2yDnXzvRIo.qE4Bi",
+    "plan": "premium",
+    "role": "admin",
+    "since": "March 2023",
+    "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
+    "continueWatching": [
+      {
+        "showId": 1,
+        "episode": 3,
+        "progress": 65
+      },
+      {
+        "showId": 4,
+        "episode": 1,
+        "progress": 30
+      },
+      {
+        "showId": 6,
+        "episode": 7,
+        "progress": 88
+      }
+    ]
+  },
+  {
+    "id": "a5a90095-08bd-4139-b54b-a2150e8f93ea",
+    "name": "uwu",
+    "email": "demo@gmail.com",
+    "passwordHash": "$2a$10$RupACWLIO35Li/JGsYWDducnNwnEpG255wh4yssiDAVMWq3duR3d6",
+    "role": "user",
+    "plan": "Basic",
+    "since": "May 2026",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=uwu",
+    "continueWatching": []
+  },
+  {
+    "id": "e4c7d176-767f-4ab5-b1f8-f74ecb004e00",
+    "name": "wow",
+    "email": "123@gmail.com",
+    "passwordHash": "$2a$10$3n/dh62M7SF7htnQLKKyremK.2h.4SFyxyvdiJTdKANIIShcFVBlu",
+    "role": "user",
+    "plan": "Basic",
+    "since": "May 2026",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=wow",
+    "continueWatching": []
+  }
+]
