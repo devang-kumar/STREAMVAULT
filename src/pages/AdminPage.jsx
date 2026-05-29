@@ -5,6 +5,7 @@ import Dashboard from '../pages/Dashboard'
 import ContentPage from '../pages/ContentPage'
 import SectionUsers from '../pages/SectionUsers'
 import CategoriesPage from '../pages/CategoriesPage'
+import PagesManagementPage from '../pages/PagesManagementPage'
 import AnalyticsPage from '../pages/AnalyticsPage'
 import SettingsPage from '../pages/SettingsPage'
 import PlansPage from '../pages/PlansPage'
@@ -74,6 +75,7 @@ function AdminPageInner() {
   const isUsers = path.includes('/admin/users')
   const isCategories = path.includes('/admin/categories')
   const isPlans = path.includes('/admin/plans')
+  const isPages = path.includes('/admin/pages')
   const isRevenue = path.includes('/admin/revenue')
   const isActivity = path.includes('/admin/activity')
   const isEngagement = path.includes('/admin/engagement')
@@ -89,6 +91,7 @@ function AdminPageInner() {
     if (isActivity) return <ActivityPage />
     if (isEngagement) return <EngagementPage />
     if (isCategories) return <CategoriesPage />
+    if (isPages) return <PagesManagementPage />
     if (isAnalytics) return <AnalyticsPage />
     if (isSettings) return <SettingsPage />
     return <Dashboard />

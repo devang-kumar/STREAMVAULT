@@ -47,19 +47,19 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-white">Company</h4>
             <div className="space-y-2 text-sm text-gray-500">
-              <a href="#" className="block transition-colors hover:text-gray-300">About Us</a>
-              <a href="#" className="block transition-colors hover:text-gray-300">Careers</a>
-              <a href="#" className="block transition-colors hover:text-gray-300">Terms of Service</a>
-              <a href="#" className="block transition-colors hover:text-gray-300">Privacy Policy</a>
-              <a href="#" className="block transition-colors hover:text-gray-300">Cookie Policy</a>
+              <Link to="/about-us" className="block transition-colors hover:text-gray-300">About Us</Link>
+              <Link to="/careers" className="block transition-colors hover:text-gray-300">Careers</Link>
+              <Link to="/terms-of-service" className="block transition-colors hover:text-gray-300">Terms of Service</Link>
+              <Link to="/privacy-policy" className="block transition-colors hover:text-gray-300">Privacy Policy</Link>
+              <Link to="/cookie-policy" className="block transition-colors hover:text-gray-300">Cookie Policy</Link>
             </div>
           </div>
 
           <div>
             <h4 className="mb-4 text-sm font-semibold text-white">Support</h4>
             <div className="space-y-2 text-sm text-gray-500">
-              <a href="#" className="block transition-colors hover:text-gray-300">Help Center</a>
-              <a href="#" className="block transition-colors hover:text-gray-300">Contact Us</a>
+              <Link to="/help-center" className="block transition-colors hover:text-gray-300">Help Center</Link>
+              <Link to="/contact-us" className="block transition-colors hover:text-gray-300">Contact Us</Link>
               <Link to="/subscription" className="block transition-colors hover:text-gray-300">Subscription Plans</Link>
               <Link to="/profile" className="block transition-colors hover:text-gray-300">Account Settings</Link>
             </div>

@@ -65,6 +65,12 @@ mongoose.connect(MONGODB_URI)
     } catch (err) {
       logger.warn('⚠️ Could not ensure default plans:', err.message);
     }
+    try {
+      const { ensureFooterPages } = await import('./utils/ensureFooterPages.js');
+      await ensureFooterPages();
+    } catch (err) {
+      logger.warn('⚠️ Could not ensure default footer pages:', err.message);
+    }
   })
   .catch(err => logger.error('❌ MongoDB Connection Error:', err));
 
@@ -91,6 +97,7 @@ import categoriesRoutes from './routes/categories.js';
 import paymentsRoutes from './routes/payments.js';
 import cmsRoutes from './routes/cms.js';
 import plansRoutes from './routes/plans.js';
+import footerPagesRoutes from './routes/footerPages.js';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/shows', showsRoutes);
@@ -102,6 +109,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api/plans', plansRoutes);
+app.use('/api', footerPagesRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

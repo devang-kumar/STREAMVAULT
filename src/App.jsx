@@ -8,6 +8,7 @@ import SubscriptionPage from './pages/SubscriptionPage'
 import ProfilePage from './pages/ProfilePage'
 import AdminPage from './pages/AdminPage'
 import SearchPage from './pages/SearchPage'
+import FooterContentPage from './pages/FooterContentPage'
 import { AuthProvider } from './hooks/useAuth'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -28,6 +29,15 @@ export default function App() {
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/subscription"  element={<SubscriptionPage />} />
         <Route path="/search"        element={<SearchPage />} />
+
+        {/* ── Footer pages ── */}
+        <Route path="/about-us"         element={<FooterContentPage slug="about-us" />} />
+        <Route path="/careers"          element={<FooterContentPage slug="careers" />} />
+        <Route path="/terms-of-service" element={<FooterContentPage slug="terms-of-service" />} />
+        <Route path="/privacy-policy"   element={<FooterContentPage slug="privacy-policy" />} />
+        <Route path="/cookie-policy"    element={<FooterContentPage slug="cookie-policy" />} />
+        <Route path="/help-center"      element={<FooterContentPage slug="help-center" />} />
+        <Route path="/contact-us"       element={<FooterContentPage slug="contact-us" />} />
 
         {/* ── Auth-required routes ── */}
         <Route path="/watch/:id/:epId" element={

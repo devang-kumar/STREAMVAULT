@@ -92,7 +92,7 @@ export default function SubscriptionPage() {
           </p>
           <div className="inline-flex items-center gap-2 mt-4 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium px-4 py-2 rounded-full">
             <Gift size={12} />
-            No credit card required to start
+            Autopay after 7-day free trial
           </div>
         </div>
 

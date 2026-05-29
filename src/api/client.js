@@ -429,3 +429,39 @@ export async function verifyPayment(paymentData) {
     body: JSON.stringify(paymentData)
   }, true)
 }
+
+// ─── Footer Pages (Public & Admin) ───────────────────────────────────────
+export async function getFooterPage(slug) {
+  return request(`/footer-pages/${slug}`, { method: 'GET' })
+}
+
+export async function submitContactForm(data) {
+  return request('/contact-submissions', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+}
+
+export async function adminGetFooterPages() {
+  return request('/admin/footer-pages', { method: 'GET' }, true)
+}
+
+export async function adminGetFooterPage(slug) {
+  return request(`/admin/footer-pages/${slug}`, { method: 'GET' }, true)
+}
+
+export async function adminUpdateFooterPage(slug, data) {
+  return request(`/admin/footer-pages/${slug}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }, true)
+}
+
+export async function adminGetContactSubmissions() {
+  return request('/admin/contact-submissions', { method: 'GET' }, true)
+}
+
+export async function adminDeleteContactSubmission(id) {
+  return request(`/admin/contact-submissions/${id}`, { method: 'DELETE' }, true)
+}
+

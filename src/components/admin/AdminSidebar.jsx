@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, Film, Users, Tag, BarChart2,
   Settings, Play, Home, ChevronLeft, ChevronRight,
-  Tv, Shield, CreditCard, DollarSign, Activity, Clock
+  Tv, Shield, CreditCard, DollarSign, Activity, Clock, FileText
 } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const NAV = [
   { id: 'users', icon: Users, label: 'Users', path: '/admin/users' },
   { id: 'plans', icon: CreditCard, label: 'Plans', path: '/admin/plans' },
   { id: 'categories', icon: Tag, label: 'Categories', path: '/admin/categories' },
+  { id: 'pages', icon: FileText, label: 'Pages', path: '/admin/pages' },
   { id: 'revenue', icon: DollarSign, label: 'Revenue', path: '/admin/revenue' },
   { id: 'activity', icon: Activity, label: 'Activity', path: '/admin/activity' },
   { id: 'engagement', icon: Clock, label: 'Engagement', path: '/admin/engagement' },
@@ -34,6 +35,7 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, onCloseM
     if (path.includes('/admin/users')) return 'users';
     if (path.includes('/admin/categories')) return 'categories';
     if (path.includes('/admin/plans')) return 'plans';
+    if (path.includes('/admin/pages')) return 'pages';
     if (path.includes('/admin/revenue')) return 'revenue';
     if (path.includes('/admin/activity')) return 'activity';
     if (path.includes('/admin/engagement')) return 'engagement';
