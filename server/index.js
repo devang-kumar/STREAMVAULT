@@ -11,6 +11,9 @@ import logger from './config/logger.js';
 
 const app = express();
 
+// Trust proxy to resolve protocol (http vs https) correctly behind reverse proxies (Render, Cloudflare, etc.)
+app.enable('trust proxy');
+
 // ─── Security Middlewares ──────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(compression());
