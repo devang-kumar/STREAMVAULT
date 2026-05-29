@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import { protect, adminOnly } from '../middleware/auth.js';
 import { flushCache } from '../middleware/cache.js';
 import { validateIdParam } from '../utils/validateId.js';
+import { ensureDefaultPlans } from '../utils/ensurePlans.js';
 
 const router = Router();
 
@@ -11,6 +12,7 @@ const router = Router();
 // GET /api/plans — list all active plans (public, for subscription page)
 router.get('/', async (req, res) => {
   try {
+    await ensureDefaultPlans();
     const plans = await Plan.find({ isActive: true })
       .sort({ sortOrder: 1, price: 1 })
       .lean();

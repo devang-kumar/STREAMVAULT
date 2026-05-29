@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Check, Star, Zap, Gift, Loader2, AlertTriangle } from 'lucide-react'
 import CheckoutModal from '../components/CheckoutModal'
 import { getPlans } from '../api/client'
+import { DEFAULT_PLANS as FALLBACK_PLANS } from '../data/defaultPlans'
 
 // ── Transform DB plan into display-friendly format ──
 function formatPlan(plan) {
@@ -29,16 +30,27 @@ export default function SubscriptionPage() {
     const fetchPlans = async () => {
       try {
         setLoading(true)
+        setError('')
         const res = await getPlans()
         const dbPlans = res.data || []
-        const formatted = dbPlans.map(formatPlan)
+        const source = dbPlans.length > 0 ? dbPlans : FALLBACK_PLANS
+        const formatted = source.map(formatPlan)
         setPlans(formatted)
+        if (dbPlans.length === 0 && formatted.length > 0) {
+          setError('Showing default plans — reconnect to the server for live checkout.')
+        }
         if (formatted.length > 0) {
           const popular = formatted.find(p => p.isPopular)
           setSelected(popular?._id || formatted[0]?._id)
         }
       } catch (err) {
-        setError('Failed to load plans. Please try again later.')
+        const formatted = FALLBACK_PLANS.map(formatPlan)
+        setPlans(formatted)
+        if (formatted.length > 0) {
+          const popular = formatted.find(p => p.isPopular)
+          setSelected(popular?._id || formatted[0]?._id)
+        }
+        setError('Could not reach the server. Showing default plans — paid checkout needs the API online.')
       } finally {
         setLoading(false)
       }
@@ -92,8 +104,8 @@ export default function SubscriptionPage() {
           </div>
         )}
 
-        {/* Empty state */}
-        {!loading && !error && plans.length === 0 && (
+        {/* Empty state (only if API and fallback both fail) */}
+        {!loading && plans.length === 0 && (
           <div className="text-center py-16">
             <p className="text-gray-400 text-sm">No plans available yet. Check back soon!</p>
           </div>

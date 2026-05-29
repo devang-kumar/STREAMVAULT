@@ -54,7 +54,15 @@ app.use(cookieParser());
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/streamvault';
 
 mongoose.connect(MONGODB_URI)
-  .then(() => logger.info('✅ MongoDB Connected'))
+  .then(async () => {
+    logger.info('✅ MongoDB Connected');
+    try {
+      const { ensureDefaultPlans } = await import('./utils/ensurePlans.js');
+      await ensureDefaultPlans();
+    } catch (err) {
+      logger.warn('⚠️ Could not ensure default plans:', err.message);
+    }
+  })
   .catch(err => logger.error('❌ MongoDB Connection Error:', err));
 
 mongoose.connection.on('error', (err) => {
