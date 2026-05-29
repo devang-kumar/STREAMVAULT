@@ -74,17 +74,17 @@ export default function LoginPage() {
           <div>
             <label className="block text-xs text-gray-400 mb-1.5 font-medium">Email Address</label>
             <div className="relative">
-              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input-dark pl-9" placeholder="you@example.com" required />
+              <Mail size={14} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input-dark input-dark--icon-left" placeholder="you@example.com" required />
             </div>
           </div>
 
           <div>
             <label className="block text-xs text-gray-400 mb-1.5 font-medium">Password</label>
             <div className="relative">
-              <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-              <input type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} className="input-dark pl-9 pr-10" placeholder="••••••••" required />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
+              <Lock size={14} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+              <input type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} className="input-dark input-dark--icon-left input-dark--icon-right" placeholder="••••••••" required />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-gray-500 hover:text-white">
                 {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>

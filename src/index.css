@@ -154,23 +154,36 @@ label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-tr
 /* ── Swiper overrides ── */
 .swiper-slide { width: auto !important; }
 
-/* ── Input style ── */
-.input-dark {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--bg-border);
-  color: #fff;
-  border-radius: 8px;
-  padding: 10px 14px;
-  width: 100%;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s;
+/* ── Input style (in @layer so Tailwind pl-/pr- utilities can override) ── */
+@layer components {
+  .input-dark {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--bg-border);
+    color: #fff;
+    border-radius: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 14px;
+    padding-left: 14px;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .input-dark:focus {
+    border-color: var(--brand-gold);
+  }
+  .input-dark::placeholder { color: #555; }
+
+  /* Left/right icon slots — use on inputs inside .relative wrappers */
+  .input-dark--icon-left {
+    padding-left: 2.75rem;
+  }
+  .input-dark--icon-right {
+    padding-right: 2.75rem;
+  }
 }
-.input-dark:focus {
-  border-color: var(--brand-gold);
-}
-.input-dark::placeholder { color: #555; }
 
 /* ── Premium badge ── */
 .badge-premium {

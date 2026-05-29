@@ -170,9 +170,9 @@ function ChangeEmailModal({ profile, onClose, onRefresh }) {
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">Current Password</label>
         <div className="relative">
-          <Lock size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} className="input-dark pl-8 pr-8 text-xs py-2" placeholder="Enter current password" required />
-          <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
+          <Lock size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} className="input-dark input-dark--icon-left input-dark--icon-right text-xs py-2" placeholder="Enter current password" required />
+          <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-gray-500 hover:text-white">
             {showPass ? <EyeOff size={12} /> : <Eye size={12} />}
           </button>
         </div>
@@ -180,15 +180,15 @@ function ChangeEmailModal({ profile, onClose, onRefresh }) {
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">New Email</label>
         <div className="relative">
-          <Mail size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} className="input-dark pl-8 text-xs py-2" placeholder="new@email.com" required />
+          <Mail size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} className="input-dark input-dark--icon-left text-xs py-2" placeholder="new@email.com" required />
         </div>
       </div>
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">Confirm New Email</label>
         <div className="relative">
-          <Mail size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type="email" value={confirmEmail} onChange={e => setConfirmEmail(e.target.value)} className="input-dark pl-8 text-xs py-2" placeholder="new@email.com" required />
+          <Mail size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type="email" value={confirmEmail} onChange={e => setConfirmEmail(e.target.value)} className="input-dark input-dark--icon-left text-xs py-2" placeholder="new@email.com" required />
         </div>
       </div>
       <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#D4A017] px-4 py-2.5 text-xs font-semibold text-black transition-all hover:bg-[#b8860b] disabled:opacity-50">
@@ -242,9 +242,9 @@ function ChangePasswordModal({ onClose }) {
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">Current Password</label>
         <div className="relative">
-          <Lock size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type={showCurrent ? 'text' : 'password'} value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="input-dark pl-8 pr-8 text-xs py-2" placeholder="Enter current password" required />
-          <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
+          <Lock size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type={showCurrent ? 'text' : 'password'} value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="input-dark input-dark--icon-left input-dark--icon-right text-xs py-2" placeholder="Enter current password" required />
+          <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-gray-500 hover:text-white">
             {showCurrent ? <EyeOff size={12} /> : <Eye size={12} />}
           </button>
         </div>
@@ -252,9 +252,9 @@ function ChangePasswordModal({ onClose }) {
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">New Password</label>
         <div className="relative">
-          <Lock size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type={showNew ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} className="input-dark pl-8 pr-8 text-xs py-2" placeholder="Min 6 characters" required minLength={6} />
-          <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
+          <Lock size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type={showNew ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} className="input-dark input-dark--icon-left input-dark--icon-right text-xs py-2" placeholder="Min 6 characters" required minLength={6} />
+          <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-gray-500 hover:text-white">
             {showNew ? <EyeOff size={12} /> : <Eye size={12} />}
           </button>
         </div>
@@ -262,8 +262,8 @@ function ChangePasswordModal({ onClose }) {
       <div>
         <label className="block text-[11px] text-gray-400 mb-1 font-medium">Confirm New Password</label>
         <div className="relative">
-          <Lock size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="input-dark pl-8 text-xs py-2" placeholder="Re-enter new password" required minLength={6} />
+          <Lock size={12} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="input-dark input-dark--icon-left text-xs py-2" placeholder="Re-enter new password" required minLength={6} />
         </div>
       </div>
       <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#D4A017] px-4 py-2.5 text-xs font-semibold text-black transition-all hover:bg-[#b8860b] disabled:opacity-50">

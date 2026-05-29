@@ -268,8 +268,8 @@ export default function SectionAddContent({ onSaved = () => {} }) {
           <p className="text-xs text-gray-500">Single connected flow for series, seasons, episodes and movies</p>
         </div>
         <div className="relative w-full sm:w-80">
-          <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} className="input-dark pl-9 text-xs" placeholder={`Search ${mode}, season, episode...`} />
+          <Search size={14} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} className="input-dark input-dark--icon-left text-xs" placeholder={`Search ${mode}, season, episode...`} />
         </div>
       </div>
 
