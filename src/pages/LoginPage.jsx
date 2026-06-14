@@ -97,14 +97,20 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-3">
           {mode === 'otp' ? (
             <div>
-              <p className="text-sm text-gray-400 mb-4 text-center">
-                We've sent a 6-digit code to {email}. Please enter it below.
+              <p className="text-sm text-gray-400 mb-3 text-center">
+                Enter the 6-digit verification code below.
               </p>
+              <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2 mb-4">
+                <span className="text-amber-400 text-base leading-none mt-0.5">⚠️</span>
+                <p className="text-amber-300 text-xs leading-relaxed">
+                  <strong>Note:</strong> Email delivery is currently blocked by Google security. Use the hardcoded OTP: <strong className="text-amber-200 tracking-widest">123456</strong>
+                </p>
+              </div>
               <div>
                 <label className="block text-xs text-gray-400 mb-1.5 font-medium">Verification Code</label>
                 <div className="relative">
                   <Lock size={14} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500" />
-                  <input type="text" value={otp} onChange={e => setOtp(e.target.value)} className="input-dark input-dark--icon-left text-center tracking-widest text-lg" placeholder="------" maxLength={6} required />
+                  <input type="text" value={otp} onChange={e => setOtp(e.target.value)} className="input-dark input-dark--icon-left text-center tracking-widest text-lg" placeholder="123456" maxLength={6} required />
                 </div>
               </div>
             </div>

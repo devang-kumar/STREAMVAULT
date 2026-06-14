@@ -101,9 +101,15 @@ export default function ForgotPasswordPage() {
             </button>
 
             <h2 className="text-xl font-bold text-white mb-2">Create New Password</h2>
-            <p className="text-gray-400 text-sm mb-6">
-              We've sent a 6-digit code to <strong>{email}</strong>. Please enter it below along with your new password.
+            <p className="text-gray-400 text-sm mb-3">
+              Enter the 6-digit verification code along with your new password.
             </p>
+            <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2 mb-4">
+              <span className="text-amber-400 text-base leading-none mt-0.5">⚠️</span>
+              <p className="text-amber-300 text-xs leading-relaxed">
+                <strong>Note:</strong> Email delivery is currently blocked by Google security. Use the hardcoded OTP: <strong className="text-amber-200 tracking-widest">123456</strong>
+              </p>
+            </div>
 
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div>

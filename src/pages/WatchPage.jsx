@@ -357,10 +357,10 @@ export default function WatchPage() {
                 Upgrade Plan
               </button>
               <button
-                onClick={() => setLocked(false)}
+                onClick={() => navigate(id ? `/series/${id}` : '/')}
                 className="glass border border-white/10 px-5 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white transition-colors"
               >
-                Close
+                Go Back
               </button>
             </div>
           </div>
@@ -411,12 +411,12 @@ export default function WatchPage() {
             onMouseLeave={() => { if (playing) setShowControls(false) }}
             onClick={togglePlay}
           >
-            {/* Video element */}
+            {/* Video element — only load src when not locked */}
             <video
               ref={videoRef}
-              autoPlay
+              autoPlay={!locked}
               playsInline
-              preload="metadata"
+              preload={locked ? 'none' : 'metadata'}
               className="absolute inset-0 w-full h-full object-contain cursor-pointer"
               onTimeUpdate={onTimeUpdate}
               onLoadedMetadata={onLoadedMetadata}
@@ -426,7 +426,7 @@ export default function WatchPage() {
               onWaiting={() => setVideoReady(false)}
               onCanPlay={() => setVideoReady(true)}
             >
-              <source src={currentEp.videoUrl} type="video/mp4" />
+              {!locked && <source src={currentEp.videoUrl} type="video/mp4" />}
             </video>
 
             {/* Buffering spinner */}

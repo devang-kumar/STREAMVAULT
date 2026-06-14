@@ -261,9 +261,14 @@ function SeriesForm({ initial, onSave, onCancel }) {
               onUpload={async (file) => { const res = await adminUploadImage(file, 'streamvault/series/banners'); set('banner', res.data?.url || ''); set('bannerPublicId', res.data?.publicId || ''); }}
               onRemove={() => { set('banner', ''); set('bannerPublicId', ''); }} />
           </Field>
-          <Field label="Trailer URL">
-            <input value={form.trailerUrl} onChange={e => set('trailerUrl', e.target.value)}
-              placeholder="YouTube or Vimeo link" style={{ width: '100%' }} />
+          <Field label="Trailer Video">
+            <FileDropzone
+              accept="video/mp4,video/webm,video/quicktime,video/*"
+              maxSize={500 * 1024 * 1024}
+              label="Upload trailer video (MP4, WebM)"
+              currentUrl={form.trailerUrl}
+              onUpload={async (file) => { const res = await adminUploadVideo(file, 'streamvault/series/trailers'); set('trailerUrl', res.data?.url || ''); }}
+              onRemove={() => set('trailerUrl', '')} />
           </Field>
         </div>
       </Card>
@@ -553,9 +558,14 @@ function MovieForm({ initial, onSave, onCancel }) {
                 onRemove={() => { set('banner', ''); set('bannerPublicId', ''); }} />
             </Field>
           </div>
-          <Field label="Trailer URL">
-            <input value={form.trailerUrl} onChange={e => set('trailerUrl', e.target.value)}
-              placeholder="YouTube or Vimeo link" style={{ width: '100%' }} />
+          <Field label="Trailer Video">
+            <FileDropzone
+              accept="video/mp4,video/webm,video/quicktime,video/*"
+              maxSize={500 * 1024 * 1024}
+              label="Upload trailer video (MP4, WebM)"
+              currentUrl={form.trailerUrl}
+              onUpload={async (file) => { const res = await adminUploadVideo(file, 'streamvault/movies/trailers'); set('trailerUrl', res.data?.url || ''); }}
+              onRemove={() => set('trailerUrl', '')} />
           </Field>
           <Field label="Video File">
             <FileDropzone accept="video/mp4,video/webm,video/quicktime" maxSize={5 * 1024 * 1024 * 1024}
@@ -1390,7 +1400,7 @@ function MoviesTab({ moviesList, onRefresh }) {
     title: (
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <div>
-          <div style={{ fontWeight: 600, fontSize: 13 }}>{safeStr(m.title)}</div>
+          <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)' }}>{safeStr(m.title)}</div>
           {m.premium && <span style={{ fontSize: 10, background: 'rgba(245,197,24,0.15)', color: 'var(--accent)', padding: '0 5px', borderRadius: 3, fontWeight: 700 }}>PRO</span>}
         </div>
       </div>

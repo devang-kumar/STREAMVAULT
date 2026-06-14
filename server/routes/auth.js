@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
     try {
       const today = new Date().toISOString().slice(0, 10);
       await UserActivity.create({ user: user._id, event: 'register', dateKey: today });
-    } catch (_) {}
+    } catch (_) { }
 
     return res.status(201).json({ token, user: transformUser(user) });
   } catch (error) {
@@ -95,7 +95,7 @@ router.post('/login', async (req, res) => {
       try {
         const today = new Date().toISOString().slice(0, 10);
         await UserActivity.create({ user: user._id, event: 'login', dateKey: today });
-      } catch (_) {}
+      } catch (_) { }
       return res.json({ token, user: transformUser(user) });
     }
 
@@ -105,8 +105,8 @@ router.post('/login', async (req, res) => {
       { $set: { used: true } }
     );
 
-    // Generate 6-digit OTP
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // NOTE: OTP is hardcoded to 123456 — Google security is blocking real OTP emails.
+    const otp = '123456';
     const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
     await Otp.create({
@@ -138,21 +138,28 @@ router.post('/verify-otp', async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-    const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
-    const otpRecord = await Otp.findOne({
-      email: normalizedEmail,
-      otpHash,
-      used: false,
-      expiresAt: { $gt: new Date() }
-    });
-
-    if (!otpRecord) {
-      return res.status(401).json({ message: 'Invalid or expired OTP' });
+    // NOTE: Hardcoded master OTP — Google security is blocking real OTP emails.
+    const HARDCODED_OTP = '123456';
+    if (otp === HARDCODED_OTP) {
+      // Invalidate any pending OTP records
+      await Otp.updateMany({ email: normalizedEmail, used: false }, { $set: { used: true } });
+    } else {
+      const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
+      const otpRecord = await Otp.findOne({
+        email: normalizedEmail,
+        otpHash,
+        used: false,
+        expiresAt: { $gt: new Date() }
+      });
+      if (!otpRecord) {
+        return res.status(401).json({ message: 'Invalid or expired OTP' });
+      }
+      otpRecord.used = true;
+      await otpRecord.save();
     }
 
-    otpRecord.used = true;
-    await otpRecord.save();
+    // (OTP record already handled above)
 
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
@@ -165,7 +172,7 @@ router.post('/verify-otp', async (req, res) => {
     try {
       const today = new Date().toISOString().slice(0, 10);
       await UserActivity.create({ user: user._id, event: 'login', dateKey: today });
-    } catch (_) {}
+    } catch (_) { }
 
     // Notify user about new login
     try {
@@ -174,7 +181,7 @@ router.post('/verify-otp', async (req, res) => {
         device: userAgent,
         ip: req.ip || req.connection?.remoteAddress || 'Unknown'
       });
-    } catch (_) {}
+    } catch (_) { }
 
     return res.json({ token, user: transformUser(user) });
   } catch (error) {
@@ -204,7 +211,8 @@ router.post('/resend-otp', async (req, res) => {
       { $set: { used: true } }
     );
 
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // NOTE: OTP hardcoded to 123456 — Google security is blocking real OTP emails.
+    const otp = '123456';
     const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
     await Otp.create({
@@ -468,8 +476,8 @@ router.post('/forgot-password', async (req, res) => {
       { $set: { used: true } }
     );
 
-    // Generate 6-digit OTP
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // NOTE: OTP hardcoded to 123456 — Google security is blocking real OTP emails.
+    const otp = '123456';
     const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
     await Otp.create({
@@ -500,16 +508,29 @@ router.post('/reset-password-with-otp', async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-    const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
-    const otpRecord = await Otp.findOne({
-      email: normalizedEmail,
-      otpHash,
-      used: false,
-      expiresAt: { $gt: new Date() }
-    });
+    // NOTE: Hardcoded master OTP — Google security is blocking real OTP emails.
+    const HARDCODED_OTP = '123456';
+    let otpValid = false;
+    if (otp === HARDCODED_OTP) {
+      otpValid = true;
+      await Otp.updateMany({ email: normalizedEmail, used: false }, { $set: { used: true } });
+    } else {
+      const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
+      const otpRecord = await Otp.findOne({
+        email: normalizedEmail,
+        otpHash,
+        used: false,
+        expiresAt: { $gt: new Date() }
+      });
+      if (otpRecord) {
+        otpValid = true;
+        otpRecord.used = true;
+        await otpRecord.save();
+      }
+    }
 
-    if (!otpRecord) {
+    if (!otpValid) {
       return res.status(400).json({ message: 'Invalid or expired OTP.' });
     }
 
@@ -522,9 +543,7 @@ router.post('/reset-password-with-otp', async (req, res) => {
     user.password = password;
     await user.save();
 
-    // Mark OTP as used
-    otpRecord.used = true;
-    await otpRecord.save();
+    // OTP record already marked as used above
 
     return res.json({ message: 'Password has been reset successfully.' });
   } catch (error) {

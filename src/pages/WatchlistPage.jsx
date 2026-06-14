@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
-import { BookmarkMinus } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { BookmarkMinus, ChevronLeft } from 'lucide-react'
 import { useWatchlist } from '../hooks/useWatchlist'
 import MovieCard from '../components/MovieCard'
 
 export default function WatchlistPage() {
   const { watchlist, loading } = useWatchlist()
+  const navigate = useNavigate()
 
   if (loading) {
     return (
@@ -16,6 +17,15 @@ export default function WatchlistPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-10 bg-[#0A0A0F]">
+      {/* Back button — sits at the very top edge above content */}
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-[72px] left-4 sm:left-6 z-30 flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors group"
+      >
+        <ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
+        Back
+      </button>
+
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-display tracking-wide text-white mb-8">My Watchlist</h1>
 

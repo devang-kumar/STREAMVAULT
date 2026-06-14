@@ -85,7 +85,7 @@ export default function MaintenanceScreen({ onAdminLogin }) {
           We're working hard to improve your experience. The site will be back online shortly.
         </p>
         <p className="mb-10 text-sm text-gray-600">
-          Thank you for your patience 🙏
+          Thank you for your patience 
         </p>
 
         {/* Status dots */}

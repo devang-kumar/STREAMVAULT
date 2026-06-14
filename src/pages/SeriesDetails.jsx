@@ -353,12 +353,24 @@ export default function SeriesDetails() {
             className="relative w-full max-w-4xl mx-4 aspect-video rounded-2xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <iframe
-              src={show.trailerUrl.replace('watch?v=', 'embed/')}
-              className="w-full h-full"
-              allow="autoplay; fullscreen"
-              allowFullScreen
-            />
+            {/* Cloudinary / direct video URL */}
+            {(show.trailerUrl.includes('cloudinary.com') || show.trailerUrl.includes('.mp4') || show.trailerUrl.includes('.webm')) ? (
+              <video
+                src={show.trailerUrl}
+                className="w-full h-full"
+                controls
+                autoPlay
+                playsInline
+              />
+            ) : (
+              /* YouTube / Vimeo embed */
+              <iframe
+                src={show.trailerUrl.replace('watch?v=', 'embed/') + (show.trailerUrl.includes('?') ? '&autoplay=1' : '?autoplay=1')}
+                className="w-full h-full"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              />
+            )}
             <button
               onClick={() => setShowTrailer(false)}
               className="absolute top-3 right-3 bg-black/60 text-white rounded-full p-1.5 hover:bg-black/80 transition-colors"

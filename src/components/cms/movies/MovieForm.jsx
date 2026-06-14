@@ -31,6 +31,7 @@ export default function MovieForm() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
+  const [trailerUploading, setTrailerUploading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
 
   const showMsg = (type, text) => {
@@ -108,6 +109,20 @@ export default function MovieForm() {
       showMsg('success', 'Video uploaded')
     } catch (err) {
       showMsg('error', err.message || 'Video upload failed')
+    }
+  }
+
+  const handleTrailerUpload = async (file) => {
+    try {
+      setTrailerUploading(true)
+      const res = await adminUploadVideo(file, 'streamvault/movies/trailers')
+      const url = res.data?.url || ''
+      setForm(p => ({ ...p, trailer_url: url }))
+      showMsg('success', 'Trailer uploaded')
+    } catch (err) {
+      showMsg('error', err.message || 'Trailer upload failed')
+    } finally {
+      setTrailerUploading(false)
     }
   }
 
@@ -286,12 +301,18 @@ export default function MovieForm() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-[#9CA3AF]">Trailer URL</label>
-              <input
-                className="w-full rounded-lg border border-[rgba(255,255,255,0.06)] bg-[#0F0F10] px-3 py-2 text-sm text-white placeholder-[#6B7280] outline-none focus:border-[#F59E0B]"
-                placeholder="YouTube or Vimeo link"
-                value={form.trailer_url}
-                onChange={handleChange('trailer_url')}
+              <label className="mb-1 block text-[11px] font-medium text-[#9CA3AF]">Trailer Video</label>
+              {trailerUploading && (
+                <div className="flex items-center gap-2 mb-1 text-[11px] text-[#F59E0B]">
+                  <Loader2 size={12} className="animate-spin" /> Uploading trailer...
+                </div>
+              )}
+              <FileDropzone
+                accept="video/mp4,video/webm,video/quicktime,video/*"
+                maxSize={500 * 1024 * 1024}
+                label="Upload trailer video (MP4, WebM)"
+                currentUrl={form.trailer_url}
+                onUpload={handleTrailerUpload}
               />
             </div>
           </div>
