@@ -5,10 +5,18 @@ import { getShow, getEpisodes } from '../api/client'
 import { getSeriesById } from '../lib/api/cms'
 import { useAuth } from '../hooks/useAuth'
 import { useWatchlist } from '../hooks/useWatchlist'
+import PremiumGateModal from '../components/PremiumGateModal'
 
 export default function SeriesDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+
+  // ── Auth & Premium state ──
+  const { user } = useAuth()
+  const userIsPremium = !!(user?.subscription?.status === 'Premium' ||
+    user?.plan?.toLowerCase() === 'premium')
+
+  const { isWatchlisted, toggleWatchlist } = useWatchlist()
 
   const [show, setShow] = useState(null)
   const [episodes, setEpisodes] = useState([])
@@ -17,6 +25,9 @@ export default function SeriesDetails() {
   const [error, setError] = useState('')
   const [selectedSeason, setSelectedSeason] = useState(1)
   const [showTrailer, setShowTrailer] = useState(false)
+
+  // Premium gate state: { type: 'series'|'season'|'episode', title: string } | null
+  const [premiumGate, setPremiumGate] = useState(null)
 
   const loadCMSData = useCallback(async () => {
     try {
@@ -79,6 +90,13 @@ export default function SeriesDetails() {
     }
   }, [id, loadCMSData])
 
+  // Automatically trigger premium gate if the whole series is premium
+  useEffect(() => {
+    if (show && show.premium && !userIsPremium) {
+      setPremiumGate({ type: 'series', title: show.title })
+    }
+  }, [show, userIsPremium])
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0A0A0F] p-6 md:p-16 space-y-4 pt-24">
@@ -106,9 +124,6 @@ export default function SeriesDetails() {
   const genreList = Array.isArray(show.genre)
     ? show.genre.filter(g => typeof g === 'string')
     : (typeof show.genre === 'string' ? [show.genre] : [])
-
-  const { user } = useAuth()
-  const { isWatchlisted, toggleWatchlist } = useWatchlist()
 
   const handleToggleWatchlist = async () => {
     if (!user) {
@@ -198,9 +213,13 @@ export default function SeriesDetails() {
 
           <div className="flex items-center gap-3 flex-wrap">
             <button
-              onClick={() =>
+              onClick={() => {
+                if (show.premium && !userIsPremium) {
+                  setPremiumGate({ type: 'series', title: show.title })
+                  return
+                }
                 navigate(`/watch/${show.id}/${episodes[0]?.id || 1}`)
-              }
+              }}
               className="btn-auth-submit flex items-center gap-2 px-7 py-3 rounded-xl"
             >
               <Play size={16} className="fill-black" />
@@ -247,18 +266,32 @@ export default function SeriesDetails() {
           {/* ✅ Functional season selector */}
           <select
             value={selectedSeason}
-            onChange={(e) =>
-              setSelectedSeason(Number(e.target.value))
-            }
+            onChange={(e) => {
+              const newSeason = Number(e.target.value)
+              // Check if the target season is premium-locked
+              const cmsSeasonObj = show.cmsSeasons?.find(s =>
+                (s.order || s.number || s.seasonNumber) === newSeason
+              )
+              if (cmsSeasonObj?.premium && !userIsPremium) {
+                setPremiumGate({ type: 'season', title: `${show.title} — Season ${newSeason}` })
+                return
+              }
+              setSelectedSeason(newSeason)
+            }}
             className="input-dark w-auto text-xs px-3 py-1.5 bg-[#111118]"
           >
             {Array.from(
               { length: seasonCount || 1 },
-              (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  Season {i + 1}
-                </option>
-              )
+              (_, i) => {
+                const cmsSeasonObj = show.cmsSeasons?.find(s =>
+                  (s.order || s.number || s.seasonNumber) === i + 1
+                )
+                return (
+                  <option key={i + 1} value={i + 1}>
+                    Season {i + 1}{cmsSeasonObj?.premium && !userIsPremium ? ' 🔒' : ''}
+                  </option>
+                )
+              }
             )}
           </select>
         </div>
@@ -272,13 +305,10 @@ export default function SeriesDetails() {
             .map((ep, index) => (
               <div
                 key={ep.id}
-                onClick={() =>
-                  !ep.premium &&
-                  navigate(`/watch/${show.id}/${ep.id}`)
-                }
+                onClick={() => navigate(`/watch/${show.id}/${ep.id}`)}
                 className={`flex items-center gap-4 p-4 rounded-xl border transition-all group ${
-                  ep.premium
-                    ? 'episode-locked cursor-not-allowed opacity-70'
+                  ep.premium && !userIsPremium
+                    ? 'border-[#1E1E2E] bg-[#111118] hover:border-[#D4A017]/30 hover:bg-white/5 cursor-pointer'
                     : 'border-[#1E1E2E] bg-[#111118] hover:border-[#D4A017]/30 hover:bg-white/5 cursor-pointer'
                 }`}
               >
@@ -379,6 +409,15 @@ export default function SeriesDetails() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* ── Premium Gate Modal ── */}
+      {premiumGate && (
+        <PremiumGateModal
+          type={premiumGate.type}
+          title={premiumGate.title}
+          onClose={() => setPremiumGate(null)}
+        />
       )}
     </div>
   )

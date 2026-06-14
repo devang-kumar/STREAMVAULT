@@ -5,6 +5,8 @@ import {
   SkipForward, ChevronLeft, Lock, Settings, Check, List, X
 } from 'lucide-react'
 import { getEpisode, getEpisodes, getShow, saveWatchSession, updateContinueWatching, trackActivity } from '../api/client'
+import { useAuth } from '../hooks/useAuth'
+import PremiumGateModal from '../components/PremiumGateModal'
 
 // ── Tiny helper ───────────────────────────────────────────────
 const fmt = (s) => {
@@ -48,6 +50,12 @@ export default function WatchPage() {
   const [showQuality,  setShowQuality]  = useState(false)
   const [quality,      setQuality]      = useState('Auto')
   const [showEpisodeList, setShowEpisodeList] = useState(true)
+
+  // ── Auth & premium gate ──
+  const { user } = useAuth()
+  const userIsPremium = !!(user?.subscription?.status === 'Premium' ||
+    user?.plan?.toLowerCase() === 'premium')
+  const [premiumGate, setPremiumGate] = useState(null)
 
   // ── Load episode data ──
   useEffect(() => {
@@ -340,32 +348,7 @@ export default function WatchPage() {
   return (
     <div className="min-h-screen bg-[#050508] flex flex-col select-none">
 
-      {/* ── Premium locked overlay ── */}
-      {locked && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass rounded-2xl p-8 max-w-md w-full text-center border border-white/10 shadow-2xl">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#F5C518]/15 flex items-center justify-center mb-4 ring-2 ring-[#F5C518]/30">
-              <Lock className="text-[#F5C518]" size={28} />
-            </div>
-            <h2 className="text-xl font-bold mb-2 text-white">Premium Episode</h2>
-            <p className="text-sm text-gray-400 mb-6">Upgrade your plan to unlock this episode and the entire library.</p>
-            <div className="flex gap-3 justify-center">
-              <button
-                onClick={() => navigate('/profile', { state: { openSubscription: true } })}
-                className="bg-[#D4A017] hover:bg-[#b8860b] text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Upgrade Plan
-              </button>
-              <button
-                onClick={() => navigate(id ? `/series/${id}` : '/')}
-                className="glass border border-white/10 px-5 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white transition-colors"
-              >
-                Go Back
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ── Premium locked overlay was here, removed in favor of PremiumGateModal ── */}
 
       {/* ── Top bar ── */}
       <div className="flex items-center gap-4 px-5 py-3 bg-gradient-to-b from-black/90 to-transparent z-20 flex-shrink-0">
@@ -641,12 +624,12 @@ export default function WatchPage() {
                 return (
                   <div
                     key={ep.id}
-                    onClick={() => !isPremium && navigate(`/watch/${id}/${ep.id}`)}
+                    onClick={() => navigate(`/watch/${id}/${ep.id}`)}
                     className={`group flex items-center gap-3 p-2 rounded-xl transition-all cursor-pointer ${
                       isActive
                         ? 'bg-[#D4A017]/15 border border-[#D4A017]/25 shadow-sm'
-                        : isPremium
-                        ? 'opacity-50 cursor-not-allowed'
+                        : isPremium && !userIsPremium
+                        ? 'border border-transparent'
                         : 'hover:bg-white/5 border border-transparent hover:border-white/5'
                     }`}
                   >
@@ -695,6 +678,15 @@ export default function WatchPage() {
           </div>
         )}
       </div>
+
+      {/* ── Premium Gate Modal ── */}
+      {(premiumGate || locked) && (
+        <PremiumGateModal
+          type={premiumGate?.type || 'episode'}
+          title={premiumGate?.title || currentEp?.title}
+          onClose={() => setPremiumGate(null)}
+        />
+      )}
     </div>
   )
 }
